@@ -20,9 +20,39 @@
         <ul id="task-list">
             </ul>
 
-        <section id="costs">
-            <h2>Calculadora de Custos</h2>
-            </section>
+        <div class="calculator-container">
+            <div class="input-column">
+                <h3>Suas Finanças (Mensal)</h3>
+                <div class="converter-section">
+                    <label for="brl-input">Valor em Reais (R$):</label>
+                    <div class="converter-input-group">
+                        <input type="number" id="brl-input" placeholder="Ex: 5000">
+                        <button id="convert-btn">Converter para Euro</button>
+                </div>
+                <small id="rate-info">Cotação do dia será carregada aqui...</small>
+                </div>
+                <hr> 
+                <label for="salary-input">Salário Bruto Mensal (€):</label>
+                <input type="number" id="salary-input" placeholder="Ex: 3500">
+
+                <label for="rent-input">Aluguel + Contas (€):</label>
+                <input type="number" id="rent-input" placeholder="Ex: 1200">
+
+                <label for="transport-input">Transporte (€):</label>
+                <input type="number" id="transport-input" placeholder="Ex: 80">
+
+                <label for="food-input">Alimentação (€):</label>
+                <input type="number" id="food-input" placeholder="Ex: 400">
+            </div>
+
+            <div class="output-column">
+                <h3>Resumo Financeiro</h3>
+                <p>Salário Líquido (após impostos aprox.): <span id="net-salary">€ 0.00</span></p>
+                <p>Total de Despesas Essenciais: <span id="total-expenses">€ 0.00</span></p>
+                <hr>
+                <p class="saldo-final"><strong>Saldo Mensal Restante:</strong> <span id="remaining-balance">€ 0.00</span></p>
+            </div>
+        </div>
     </main>
 
     <footer>

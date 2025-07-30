@@ -1,86 +1,222 @@
-// Espera o conteúdo da página carregar completamente antes de executar o script
+// script.js
+
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- SELEÇÃO DOS ELEMENTOS DO HTML ---
-    // Encontra os elementos com os quais vamos interagir e os guarda em variáveis
+    // --- SELEÇÃO DOS ELEMENTOS ---
     const taskInput = document.getElementById('task-input');
     const addTaskBtn = document.getElementById('add-task-btn');
     const taskList = document.getElementById('task-list');
 
     // --- FUNÇÕES ---
 
-    // Função principal para criar uma nova tarefa
-    function createTask() {
-        // 1. Pega o texto digitado pelo usuário e remove espaços em branco extras
-        const taskText = taskInput.value.trim();
+    // Função para salvar todas as tarefas atuais no localStorage
+    function saveTasks() {
+        const tasks = [];
+        // Pega todos os itens da lista na página
+        document.querySelectorAll('.task-item').forEach(taskItem => {
+            // Para cada item, cria um objeto com o texto e o estado 'completed'
+            tasks.push({
+                text: taskItem.querySelector('span').textContent,
+                completed: taskItem.classList.contains('completed')
+            });
+        });
+        // Converte a lista de objetos em texto (JSON) e salva no localStorage
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
 
-        // 2. Verifica se o usuário realmente digitou algo. Se não, exibe um alerta e para.
-        if (taskText === '') {
-            alert('Por favor, digite uma tarefa válida.');
-            return; // Encerra a função aqui se o campo estiver vazio
+    // Função para carregar as tarefas salvas quando a página abre
+    function loadTasks() {
+        // Pega as tarefas salvas no localStorage
+        const savedTasks = localStorage.getItem('tasks');
+        // Se houver tarefas salvas...
+        if (savedTasks) {
+            // Converte o texto (JSON) de volta para uma lista de objetos
+            const tasks = JSON.parse(savedTasks);
+            // Para cada tarefa na lista, cria o elemento HTML correspondente
+            tasks.forEach(task => {
+                createTaskElement(task.text, task.completed);
+            });
+        }
+    }
+
+    // A função de criar tarefa é mais específica para criar o HTML
+    function createTaskElement(text, isCompleted) {
+        const listItem = document.createElement('li');
+        listItem.className = 'task-item';
+        // Se a tarefa já estava completa, adiciona a classe 'completed'
+        if (isCompleted) {
+            listItem.classList.add('completed');
         }
 
-        // 3. Cria os elementos HTML para a nova tarefa
-        const listItem = document.createElement('li'); // Cria o <li>
-        listItem.className = 'task-item'; // Adiciona uma classe para o CSS
+        const taskTextSpan = document.createElement('span');
+        taskTextSpan.textContent = text;
 
-        const taskTextSpan = document.createElement('span'); // Cria o <span> para o texto
-        taskTextSpan.textContent = taskText; // Coloca o texto digitado dentro do <span>
-
-        const completeBtn = document.createElement('button'); // Cria o botão "Concluir"
+        const completeBtn = document.createElement('button');
         completeBtn.textContent = 'Concluir';
         completeBtn.className = 'complete-btn';
 
-        const deleteBtn = document.createElement('button'); // Cria o botão "Excluir"
+        const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Excluir';
         deleteBtn.className = 'delete-btn';
 
-        // 4. Monta o item da lista, colocando os elementos na ordem correta
         listItem.appendChild(taskTextSpan);
         listItem.appendChild(completeBtn);
         listItem.appendChild(deleteBtn);
-
-        // 5. Adiciona o item da lista (<li>) completo à lista de tarefas (<ul>) na página
         taskList.appendChild(listItem);
-
-        // 6. Limpa o campo de digitação e foca nele para a próxima tarefa
-        taskInput.value = '';
-        taskInput.focus();
     }
 
-    // --- EVENT LISTENERS (OUVINTES DE EVENTOS) ---
+    // A função principal usa a 'createTaskElement' e salva
+    function handleAddTask() {
+        const taskText = taskInput.value.trim();
+        if (taskText === '') {
+            alert('Por favor, digite uma tarefa válida.');
+            return;
+        }
+        createTaskElement(taskText, false); // Cria uma nova tarefa, sempre como não concluída
+        taskInput.value = '';
+        taskInput.focus();
+        saveTasks(); // NOVO: Salva a lista toda vez que uma nova tarefa é adicionada
+    }
 
-    // 1. Diz ao botão "Adicionar" para executar a função createTask quando for clicado
-    addTaskBtn.addEventListener('click', createTask);
+    // --- EVENT LISTENERS ---
 
-    // 2. Bônus: Permite que o usuário adicione uma tarefa pressionando a tecla "Enter"
+    addTaskBtn.addEventListener('click', handleAddTask);
     taskInput.addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
-            createTask();
+            handleAddTask();
         }
     });
 
-    // 3. Adiciona UM ÚNICO "ouvinte" na lista inteira para gerenciar os cliques
     taskList.addEventListener('click', function(event) {
-        
-        // Pega o elemento exato que foi clicado (seja o texto, um botão, etc.)
         const clickedElement = event.target;
 
-        // VERIFICA SE O CLIQUE FOI NO BOTÃO "CONCLUIR"
         if (clickedElement.className === 'complete-btn') {
-            // Se for, pega o 'pai' do botão, que é o item da lista (<li>)
             const taskItem = clickedElement.parentElement;
-            // Adiciona ou remove a classe 'completed' para mudar o estilo via CSS
             taskItem.classList.toggle('completed');
+            saveTasks(); // Salva a lista toda vez que uma tarefa é concluída/desconcluída
         }
 
-        // VERIFICA SE O CLIQUE FOI NO BOTÃO "EXCLUIR"
         if (clickedElement.className === 'delete-btn') {
-            // Se for, pega o 'pai' do botão, que é o item da lista (<li>)
             const taskItem = clickedElement.parentElement;
-            // Remove o item da lista (<li>) da página
             taskItem.remove();
+            saveTasks(); // Salva a lista toda vez que uma tarefa é excluída
         }
     });
 
-}); // Este é o '});' de fechamento do DOMContentLoaded. O código vai ACIMA dele.
+    // --- CARGA INICIAL ---
+    loadTasks(); // Carrega as tarefas salvas assim que a página estiver pronta
+
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- LÓGICA DA CALCULADORA DE CUSTOS ---
+
+    // 1. Seleciona todos os elementos da calculadora
+    const salaryInput = document.getElementById('salary-input');
+    const rentInput = document.getElementById('rent-input');
+    const transportInput = document.getElementById('transport-input');
+    const foodInput = document.getElementById('food-input');
+
+    const netSalarySpan = document.getElementById('net-salary');
+    const totalExpensesSpan = document.getElementById('total-expenses');
+    const remainingBalanceSpan = document.getElementById('remaining-balance');
+
+    // 2. Cria a função que faz todos os cálculos
+    function calculateBudget() {
+        // Pega os valores dos inputs, convertendo para número. Se estiver vazio, considera como 0.
+        const grossSalary = parseFloat(salaryInput.value) || 0;
+        const rent = parseFloat(rentInput.value) || 0;
+        const transport = parseFloat(transportInput.value) || 0;
+        const food = parseFloat(foodInput.value) || 0;
+
+        // Lógica de cálculo (simplificada)
+        // Na Alemanha, os impostos são complexos. Vamos usar uma aproximação de 35% de impostos.
+        const estimatedTaxes = grossSalary * 0.35;
+        const netSalary = grossSalary - estimatedTaxes;
+        
+        const totalExpenses = rent + transport + food;
+        const remainingBalance = netSalary - totalExpenses;
+
+        // 3. Atualiza o HTML com os resultados formatados
+        netSalarySpan.textContent = `€ ${netSalary.toFixed(2)}`;
+        totalExpensesSpan.textContent = `€ ${totalExpenses.toFixed(2)}`;
+        remainingBalanceSpan.textContent = `€ ${remainingBalance.toFixed(2)}`;
+    }
+
+    // 4. Adiciona 'ouvintes' de evento para chamar a função de cálculo
+    // O evento 'input' é acionado toda vez que o usuário digita algo
+    salaryInput.addEventListener('input', calculateBudget);
+    rentInput.addEventListener('input', calculateBudget);
+    transportInput.addEventListener('input', calculateBudget);
+    foodInput.addEventListener('input', calculateBudget);
+});
+// --- LÓGICA DA CONVERSÃO VIA API BACEN ---
+
+// 1. Seleciona os novos elementos que acabamos de criar
+const brlInput = document.getElementById('brl-input');
+const convertBtn = document.getElementById('convert-btn');
+const rateInfo = document.getElementById('rate-info');
+const salaryInput = document.getElementById('salary-input');
+
+// 2. Cria a função assíncrona para buscar os dados na API
+async function fetchConversionRate() {
+    // --- 1. PREPARAÇÃO DAS DATAS  ---
+    const endDate = new Date(); // Data de hoje
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - 7); // Buscando na janela dos últimos 7 dias para garantir
+
+    // Função auxiliar para formatar a data no padrão MM-DD-YYYY que a API exige
+    function formatDateForApi(date) {
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${month}-${day}-${year}`;
+    }
+
+    const formattedStartDate = formatDateForApi(startDate);
+    const formattedEndDate = formatDateForApi(endDate);
+
+    // --- 2. MONTAGEM DA URL INTELIGENTE ---
+    // Usando o endpoint de período e os truques de OData para pegar apenas a última cotação 
+    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@moeda='EUR'&@dataInicial='${formattedStartDate}'&@dataFinalCotacao='${formattedEndDate}'&$top=1&$orderby=dataHoraCotacao%20desc&$format=json&$select=cotacaoCompra,dataHoraCotacao`;
+
+    rateInfo.textContent = 'Buscando a cotação mais recente...';
+
+    // --- 3. EXECUÇÃO DA CHAMADA (A lógica interna continua a mesma) ---
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Não foi possível obter a cotação. Verifique a conexão.');
+        }
+
+        const data = await response.json();
+        
+        if (data.value.length === 0) {
+            throw new Error('Nenhuma cotação encontrada no período. Tente mais tarde.');
+        }
+        
+        const latestQuote = data.value[0];
+        const exchangeRate = latestQuote.cotacaoCompra;
+        
+        // Pega a data da cotação e formata para exibição
+        const quoteDate = new Date(latestQuote.dataHoraCotacao);
+        const friendlyDate = quoteDate.toLocaleDateString('pt-BR');
+        
+        rateInfo.textContent = `Cotação de ${friendlyDate}: 1 EUR = R$ ${exchangeRate.toFixed(2)}`;
+
+        const brlValue = parseFloat(brlInput.value) || 0;
+        if (brlValue > 0) {
+            const euroValue = brlValue / exchangeRate;
+            salaryInput.value = euroValue.toFixed(2);
+            salaryInput.dispatchEvent(new Event('input'));
+        }
+
+    } catch (error) {
+        rateInfo.textContent = error.message;
+        console.error("Erro ao buscar API:", error);
+    }
+}
+
+// 3. Adiciona o 'ouvinte' de evento ao botão de conversão
+convertBtn.addEventListener('click', fetchConversionRate);
