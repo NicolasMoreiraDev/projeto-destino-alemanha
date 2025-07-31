@@ -1,194 +1,256 @@
-@charset "UTF-8";
-/* Estilos para os itens da lista de tarefas */
-.task-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
+/* estilos/baseMobile.css - TEMA ALEMANHA */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* --- VARIÁVEIS DO TEMA --- */
+:root {
+    /* Paleta Bandeira da Alemanha */
+    --color-black: #262626;
+    --color-red: #DE0000;
+    --color-gold: #FFCE00;
+
+    /* Cores de Suporte */
+    --text-on-dark: #FFFFFF;
+    --text-on-light: #333333;
+    --background-light: #f5f5f5;
+    --border-light: #e0e0e0;
+
+    /* Unidades de Design */
+    --font-main: 'Roboto', sans-serif;
+    --border-radius: 6px;
+    --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    --transition-fast: all 0.2s ease-in-out;
 }
 
-/* Estilo para quando uma tarefa está CONCLUÍDA */
-.task-item.completed span {
-    text-decoration: line-through; /* Risca o texto */
-    color: #888; /* Deixa o texto cinza */
+/* --- ESTILOS GERAIS --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--background-light);
+    background-image: linear-gradient(rgba(245, 245, 245, 0.9), rgba(245, 245, 245, 0.9)), url('https://images.unsplash.com/photo-1528741303291-32b354364abc?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--text-on-light);
 }
 
-/* Estilos para os botões dentro das tarefas */
-.task-item button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-.complete-btn {
-    background-color: #28a745; /* Verde */
-    color: white;
-}
-
-.delete-btn {
-    background-color: #dc3545; /* Vermelho */
-    color: white;
-}
-/* --- ESTILOS DA CALCULADORA DE CUSTOS --- */
-
-/* Container principal da calculadora, usando Flexbox para as colunas */
-.calculator-container {
-    display: flex;
-    flex-direction: column; /* Em telas pequenas, as colunas ficam uma sobre a outra */
-    gap: 2rem; /* Espaçamento entre as colunas */
-    background-color: #ffffff;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-/* Estilos para os campos de entrada (input) */
-.input-column label {
-    display: block; /* Faz o label ocupar a linha inteira */
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: #555;
-}
-
-.input-column input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-/* Estilos para a seção de conversão de moeda */
-.converter-section {
-    background-color: #e6f2ff;
+main {
     padding: 1rem;
-    border-radius: 5px;
+}
+
+/* --- HEADER TEMÁTICO --- */
+header {
+    background: linear-gradient(135deg, var(--color-black) 50%, #1a1a1a 100%);
+    color: var(--text-on-dark);
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 5px solid var(--color-gold);
+}
+header h1 { font-size: 2rem; }
+header p { font-size: 1.1rem; color: #ccc; }
+
+/* --- SEÇÕES COM ESTILO "CARD" --- */
+.card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-left: 5px solid var(--color-red);
+    transition: var(--transition-fast);
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+.card h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-black);
+}
+.card h2 .fas {
+    color: var(--color-red);
+}
+
+/* --- ANIMAÇÕES E FEEDBACK VISUAL --- */
+@keyframes fadeIn {/* Animação de entrada */
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.task-item {/* Animação de entrada e formação de task */
+    animation: fadeIn 0.4s ease-out;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.375rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+button {
+    transition: var(--transition-fast);
+}
+button:active {
+    transform: scale(0.97); /* Feedback de clique */
+}
+
+/* Feedback de carregamento para o botão da API */
+button.loading {/* Oculta o texto enquanto está carregando */
+    cursor: not-allowed;
+    position: relative;
+    color: transparent !important; /* Esconde o texto */
+}
+button.loading::after {/* Exibe o ícone de carregamento */
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+/* --- ESTILOS ESPECÍFICOS DOS COMPONENTES --- */
+
+/* Botão Principal */
+button, .button {
+    background-color: var(--color-red);
+    color: white;
+    font-weight: 700;
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    text-transform: uppercase;
+}
+button:hover, .button:hover {
+    background-color: #A30000; /* Vermelho mais escuro */
+}
+
+/* Inputs */
+input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
     margin-bottom: 1rem;
 }
-
-.converter-input-group {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+input:focus {
+    outline: 2px solid var(--color-gold);
+    border-color: var(--color-gold);
 }
 
-.converter-input-group input {
-    flex-grow: 1; /* Faz o input ocupar o espaço disponível */
-}
+/* Checklist */
+.task-item button { padding: 8px 10px; font-size: 0.8rem; text-transform: none; }/* Estilo dos botões dentro das tasks */
+.complete-btn { background-color: #28a745; }
+.complete-btn:hover { background-color: #218838; }
+.delete-btn { background-color: #6c757d; }
+.delete-btn:hover { background-color: #5a6268; }
 
-#convert-btn {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
+/* Calculadora */
+#convert-btn { background-color: var(--color-gold); color: var(--color-black); }/* Cor e estilo do botão de conversão */
+#convert-btn:hover { background-color: #d4ac0d; }
 
-#convert-btn:hover {
-    background-color: #0056b3;
-}
-
-#rate-info {
-    display: block;
-    margin-top: 0.5rem;
-    font-style: italic;
-    color: #666;
-}
-
-/* Estilos para a coluna de resultados */
-.output-column h3 {
-    margin-top: 0;
-}
-
-.output-column p {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.output-column p strong {
-    font-size: 1.1rem;
-}
-
-.output-column .saldo-final span {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: #28a745; /* Verde para o saldo positivo */
-}
-
-
-/* --- ESTILOS DA SEÇÃO DE RECURSOS ÚTEIS --- */
-
-#resources {
-    background-color: #f9f9f9;
-    padding: 1.5rem;
-    border-radius: 8px;
-}
-
-.resource-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
+/* Recursos */
 .resource-category h3 {
-    border-bottom: 2px solid #007bff;
+    color: var(--color-black);
+    font-weight: 700;
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
-    color: #007bff;
+    border-bottom: 2px solid var(--border-light);
 }
-
-.resource-category ul {
-    list-style: none; /* Remove as bolinhas da lista */
-    padding: 0;
-}
-
-.resource-category li {
-    margin-bottom: 0.8rem;
-}
-
 .resource-category a {
+    color: var(--color-red);
+    font-weight: 500;
     text-decoration: none;
-    color: #333;
-    transition: color 0.2s;
 }
-
 .resource-category a:hover {
-    color: #0056b3;
     text-decoration: underline;
 }
 
-/* --- MELHORIAS PARA TELAS MAIORES (TABLET/DESKTOP) --- */
+/* =============================================== */
+/* --- ESTILOS PARA TELAS MAIORES (TABLET+) --- */
+/* =============================================== */
 
-/* Quando a tela for maior que 768px... */
+/* As regras abaixo só serão aplicadas quando a tela tiver 768px de largura ou mais */
 @media (min-width: 768px) {
-    /* ...a calculadora e os recursos usarão colunas lado a lado */
+
+    /* --- AJUSTES GERAIS --- */
+    main {
+        padding: 2rem; /* Mais espaçamento nas laterais */
+    }
+
+    /* --- LAYOUT DO CABEÇALHO --- */
+    header {
+        text-align: left; /* Alinha o texto à esquerda */
+        padding: 1.5rem 2rem;
+    }
+    header h1 {
+        font-size: 2.2rem;
+    }
+    header p {
+        display: block; /* O subtítulo volta a aparecer em telas maiores */
+    }
+    #menu-toggle {
+        display: none; /* O botão hambúrguer some, pois o menu será visível */
+    }
+
+    /* --- LAYOUT DA NAVEGAÇÃO --- */
+    nav {
+        max-height: none; /* Remove o limite de altura */
+        display: block !important; /* Garante que o menu esteja sempre visível */
+        background-color: var(--color-black);
+        padding: 0;
+        border-bottom: 3px solid var(--color-red);
+    }
+    nav ul {
+        display: flex;
+        flex-direction: row; /* Itens do menu lado a lado */
+        justify-content: center;
+        padding: 0.5rem 0;
+    }
+    nav ul li {
+        border: none; /* Remove as bordas que separam no mobile */
+    }
+    nav ul li a {
+        padding: 1rem 1.5rem;
+        border-top: none; /* Remove a borda do topo */
+    }
+
+    /* --- LAYOUT DA CALCULADORA EM COLUNAS --- */
     .calculator-container {
+        display: flex;
         flex-direction: row; /* Colunas lado a lado */
+        gap: 2rem;
     }
-
     .input-column, .output-column {
-        flex: 1; /* Faz cada coluna ocupar metade do espaço */
+        flex: 1; /* Cada coluna ocupa metade do espaço */
     }
 
+    /* --- LAYOUT DOS RECURSOS EM COLUNAS --- */
     .resource-list {
-        flex-direction: row; /* Colunas lado a lado */
-        justify-content: space-between;
+        display: flex;
+        flex-direction: row;
+        gap: 2rem;
     }
-
     .resource-category {
-        flex: 1;
-        margin-right: 20px; /* Espaçamento entre as categorias */
-    }
-
-    .resource-category:last-child {
-        margin-right: 0;
+        flex: 1; /* Cada categoria ocupa um terço do espaço */
     }
 }

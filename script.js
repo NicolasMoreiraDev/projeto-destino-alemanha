@@ -1,11 +1,11 @@
 // script.js
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {// Espera até que todo o conteúdo da página esteja pronto antes de executar o código dentro do bloco
 
     // --- SELEÇÃO DOS ELEMENTOS ---
-    const taskInput = document.getElementById('task-input');
-    const addTaskBtn = document.getElementById('add-task-btn');
-    const taskList = document.getElementById('task-list');
+    const taskInput = document.getElementById('task-input');// Input onde o usuário escreve a tarefa
+    const addTaskBtn = document.getElementById('add-task-btn');// Botão para adicionar uma nova tarefa
+    const taskList = document.getElementById('task-list');// Lista onde as tarefas serão mostradas
 
     // --- FUNÇÕES ---
 
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // A função de criar tarefa é mais específica para criar o HTML
+    // Função para criar um novo elemento de tarefa na lista
     function createTaskElement(text, isCompleted) {
         const listItem = document.createElement('li');
         listItem.className = 'task-item';
@@ -48,14 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
             listItem.classList.add('completed');
         }
 
-        const taskTextSpan = document.createElement('span');
+        const taskTextSpan = document.createElement('span');// Cria um span para mostrar o texto da tarefa
         taskTextSpan.textContent = text;
 
-        const completeBtn = document.createElement('button');
+        const completeBtn = document.createElement('button');// Cria um botão para marcar como concluído
         completeBtn.textContent = 'Concluir';
         completeBtn.className = 'complete-btn';
 
-        const deleteBtn = document.createElement('button');
+        const deleteBtn = document.createElement('button');// Cria um botão para deletar a tarefa
         deleteBtn.textContent = 'Excluir';
         deleteBtn.className = 'delete-btn';
 
@@ -177,20 +177,24 @@ async function fetchConversionRate() {
     const formattedStartDate = formatDateForApi(startDate);
     const formattedEndDate = formatDateForApi(endDate);
 
-    // --- 2. MONTAGEM DA URL INTELIGENTE ---
-    // Usando o endpoint de período e os truques de OData para pegar apenas a última cotação 
-    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@moeda='EUR'&@dataInicial='${formattedStartDate}'&@dataFinalCotacao='${formattedEndDate}'&$top=1&$orderby=dataHoraCotacao%20desc&$format=json&$select=cotacaoCompra,dataHoraCotacao`;
-
     rateInfo.textContent = 'Buscando a cotação mais recente...';
+    convertBtn.disabled = true;
+    convertBtn.classList.add('loading');
 
-    // --- 3. EXECUÇÃO DA CHAMADA (A lógica interna continua a mesma) ---
     try {
-        const response = await fetch(url);
+        // --- 2. MONTAGEM DA URL INTELIGENTE ---
+        // Usando o endpoint de período e os truques de OData para pegar apenas a última cotação 
+        const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@moeda='EUR'&@dataInicial='${formattedStartDate}'&@dataFinalCotacao='${formattedEndDate}'&$top=1&$orderby=dataHoraCotacao%20desc&$format=json&$select=cotacaoCompra,dataHoraCotacao`;
+
+        rateInfo.textContent = 'Buscando a cotação mais recente...';
+
+        // --- 3. EXECUÇÃO DA CHAMADA (A lógica interna continua a mesma) ---
+        const response = await fetch(url);// Faz a chamada à API
         if (!response.ok) {
             throw new Error('Não foi possível obter a cotação. Verifique a conexão.');
         }
 
-        const data = await response.json();
+        const data = await response.json();// Converte a resposta em JSON
         
         if (data.value.length === 0) {
             throw new Error('Nenhuma cotação encontrada no período. Tente mais tarde.');
@@ -215,6 +219,9 @@ async function fetchConversionRate() {
     } catch (error) {
         rateInfo.textContent = error.message;
         console.error("Erro ao buscar API:", error);
+    } finally {
+        convertBtn.disabled = false;
+        convertBtn.classList.remove('loading');
     }
 }
 
