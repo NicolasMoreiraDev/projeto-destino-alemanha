@@ -32,3 +32,163 @@
     background-color: #dc3545; /* Vermelho */
     color: white;
 }
+/* --- ESTILOS DA CALCULADORA DE CUSTOS --- */
+
+/* Container principal da calculadora, usando Flexbox para as colunas */
+.calculator-container {
+    display: flex;
+    flex-direction: column; /* Em telas pequenas, as colunas ficam uma sobre a outra */
+    gap: 2rem; /* Espaçamento entre as colunas */
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Estilos para os campos de entrada (input) */
+.input-column label {
+    display: block; /* Faz o label ocupar a linha inteira */
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+}
+
+.input-column input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Estilos para a seção de conversão de moeda */
+.converter-section {
+    background-color: #e6f2ff;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.converter-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.converter-input-group input {
+    flex-grow: 1; /* Faz o input ocupar o espaço disponível */
+}
+
+#convert-btn {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#convert-btn:hover {
+    background-color: #0056b3;
+}
+
+#rate-info {
+    display: block;
+    margin-top: 0.5rem;
+    font-style: italic;
+    color: #666;
+}
+
+/* Estilos para a coluna de resultados */
+.output-column h3 {
+    margin-top: 0;
+}
+
+.output-column p {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.output-column p strong {
+    font-size: 1.1rem;
+}
+
+.output-column .saldo-final span {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #28a745; /* Verde para o saldo positivo */
+}
+
+
+/* --- ESTILOS DA SEÇÃO DE RECURSOS ÚTEIS --- */
+
+#resources {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.resource-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.resource-category h3 {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    color: #007bff;
+}
+
+.resource-category ul {
+    list-style: none; /* Remove as bolinhas da lista */
+    padding: 0;
+}
+
+.resource-category li {
+    margin-bottom: 0.8rem;
+}
+
+.resource-category a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.2s;
+}
+
+.resource-category a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* --- MELHORIAS PARA TELAS MAIORES (TABLET/DESKTOP) --- */
+
+/* Quando a tela for maior que 768px... */
+@media (min-width: 768px) {
+    /* ...a calculadora e os recursos usarão colunas lado a lado */
+    .calculator-container {
+        flex-direction: row; /* Colunas lado a lado */
+    }
+
+    .input-column, .output-column {
+        flex: 1; /* Faz cada coluna ocupar metade do espaço */
+    }
+
+    .resource-list {
+        flex-direction: row; /* Colunas lado a lado */
+        justify-content: space-between;
+    }
+
+    .resource-category {
+        flex: 1;
+        margin-right: 20px; /* Espaçamento entre as categorias */
+    }
+
+    .resource-category:last-child {
+        margin-right: 0;
+    }
+}

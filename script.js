@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 // --- LÓGICA DA CONVERSÃO VIA API BACEN ---
 
-// 1. Seleciona os novos elementos que acabamos de criar
+// 1. Seleciona os novos elementos
 const brlInput = document.getElementById('brl-input');
 const convertBtn = document.getElementById('convert-btn');
 const rateInfo = document.getElementById('rate-info');
