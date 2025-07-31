@@ -91,9 +91,12 @@ header p { font-size: 1.1rem; color: #ccc; }
     display: flex;
     align-items: center;
     justify-content: space-between;
-
 }
-
+/* Estilos adicionais para itens completos da checklist */
+.task-item.completed span {
+    text-decoration: line-through;
+    color: #888;
+}
 button {
     transition: var(--transition-fast);
 }
